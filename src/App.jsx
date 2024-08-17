@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Places from './components/Places.jsx';
 import { AVAILABLE_PLACES } from './data.js';
@@ -7,12 +7,22 @@ import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import { sortPlacesByDistance } from './loc.js';
 
+
+// recupère l'ensemble des ids
+const storeIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+// tableau d'objet de lieu basé sur le tableau d'id
+const storedPlaces = storeIds.map((id) => 
+  AVAILABLE_PLACES.find((place)=> place.id === id)
+);
+
 function App() {
-  const modal = useRef();
+
+  // gére l'état d'ouverture ou de fermeture du modal
+  const [modalIsOpen, setModalIsOpen] = useState(false)
   const selectedPlace = useRef();
   // état qui gère les places disponibles
   const [availablePlaces, setAvailablePlaces] = useState([]);
-  const [pickedPlaces, setPickedPlaces] = useState([]);
+  const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
 
   // nous avons utiliser useEffect pour deux raison d'une part vu que  
   // la récupération de l'emplacement de l'utilisateur prendra du temps  
@@ -36,14 +46,15 @@ function App() {
 
 
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    setModalIsOpen(true);
     selectedPlace.current = id;
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
+    setModalIsOpen(false);
   }
 
+  // MAJ la liste des lieux sélectionnés dans le stockage de nos navigateurs
   function handleSelectPlace(id) {
     setPickedPlaces((prevPickedPlaces) => {
       if (prevPickedPlaces.some((place) => place.id === id)) {
@@ -52,18 +63,38 @@ function App() {
       const place = AVAILABLE_PLACES.find((place) => place.id === id);
       return [place, ...prevPickedPlaces];
     });
+
+    // recupère tout les ids et de les stockés
+    const storeIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+    if(storeIds.indexOf(id) === -1){
+      localStorage.setItem(
+        'selectedPlaces',
+        JSON.stringify([id, ...storeIds])
+      );
+    }
   }
 
-  function handleRemovePlace() {
-    setPickedPlaces((prevPickedPlaces) =>
-      prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
-    );
-    modal.current.close();
-  }
+  const handleRemovePlace = useCallback(
+    function handleRemovePlace() {
+      setPickedPlaces((prevPickedPlaces) =>
+        prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
+      );
+      setModalIsOpen(false);
+  
+  
+      // Maj des éléments stockés en mémoire après suppression d'un élément
+      const storeIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+      localStorage.setItem('selectedPlaces', 
+        JSON.stringify(storeIds.filter((id) => 
+        id !== selectedPlace.current))
+      )
+    }, []
+  )
+
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
