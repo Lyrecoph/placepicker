@@ -9,15 +9,15 @@ PlacePicker is a ReactJS-based web application that allows users to explore and 
 
 ## Features
 
-**1.Place Selection:** Users can browse a list of places, which are sorted based on proximity to their current location. They can then select places they are interested in visiting, which will be added to their collection.
+**1. Place Selection:** Users can browse a list of places, which are sorted based on proximity to their current location. They can then select places they are interested in visiting, which will be added to their collection.
 
-**Remove Place:** If a user changes their mind, they can remove a place from their collection. A modal confirmation dialog is shown to prevent accidental deletions.
+**2. Remove Place:** If a user changes their mind, they can remove a place from their collection. A modal confirmation dialog is shown to prevent accidental deletions.
 
-**Location-based Sorting:** The application uses the browser's geolocation API to obtain the user's location and sorts the list of available places based on the distance from the user.
+**3. Location-based Sorting:** The application uses the browser's geolocation API to obtain the user's location and sorts the list of available places based on the distance from the user.
 
-**Local Storage:** The app persists the user's selection using local storage, allowing users to retain their collection of places even after refreshing or closing the browser.
+**4. Local Storage:** The app persists the user's selection using local storage, allowing users to retain their collection of places even after refreshing or closing the browser.
 
-**Modal & Confirmation:** A modal dialog is used for confirming the deletion of a selected place, featuring a countdown timer to auto-confirm the deletion.
+**5. Modal & Confirmation:** A modal dialog is used for confirming the deletion of a selected place, featuring a countdown timer to auto-confirm the deletion.
 
 ## Components
 
@@ -60,19 +60,23 @@ PlacePicker is a ReactJS-based web application that allows users to explore and 
 
 1. **Clone the Repository:**
 
-```bash```
-git clone https://github.com/your-repository-url
+```bash
+git clone https://github.com/Lyrecoph/placepicker.git
+
 cd placepicker
+```
 
 2. **Install Dependencies:**
 
-```bash```
+```bash
 npm install
+```
 
 3. **Run the Application:**
 
-```bash```
+```bash
 npm start
+```
 
 4. **Access the Application:**
 
@@ -89,8 +93,11 @@ JavaScript (ES6+): For application logic
 ## Future Enhancements
 
 **Search Functionality:** Implement a search bar to filter available places.
+
 **User Authentication:** Allow users to save their place collections to a database.
+
 **Map Integration:** Display selected places on an interactive map.
+
 **Social Sharing:** Enable users to share their collections on social media.
 
 ## .gitignore
